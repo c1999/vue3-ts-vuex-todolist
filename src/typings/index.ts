@@ -2,9 +2,9 @@ interface IState {
     list: ITodo[]
 }
 interface ITodo {
-    id: number,
+    id: string,
     content: string,
-    status:TODO_STATUS
+    status: TODO_STATUS
 }
 enum TODO_STATUS {
     WILLD = 'willdo',

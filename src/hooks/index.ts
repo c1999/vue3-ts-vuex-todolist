@@ -1,26 +1,26 @@
-import { SET_TODO, SET_TODO_LIST } from "@/store/actionTypes";
+import { SET_TODO, SET_TODO_LIST, REMOVE_TODO } from "@/store/actionTypes";
 import { ITodo, TODO_STATUS } from "@/typings"
 import { Store, useStore } from "vuex"
 
 export interface IUseTodo {
-    setTodo: (value: string)=>void;
-    setTodoList: ()=>void;
-    removeTodo: ()=>void;
-    setStatus: ()=>void;
-    setDoing: ()=>void;
+    setTodo: (value: string) => void;
+    setTodoList: () => void;
+    removeTodo: (id: string) => void;
+    setStatus: (msg: string) => void;
+    setDoing: () => void;
 }
 interface IUseLocalStorage {
-    getLocalList: ()=>ITodo[];
-    setLocalList: (todoList: ITodo[])=>void;
+    getLocalList: () => ITodo[];
+    setLocalList: (todoList: ITodo[]) => void;
 }
 function useTodo(): IUseTodo {
-    const store:Store<any> = useStore();
+    const store: Store<any> = useStore();
     const { setLocalList }: IUseLocalStorage = useLocalStorage();
 
     // 保存todo
     function setTodo(value: string): void {
         const todo: ITodo = {
-            id: 111,
+            id: new Date().getTime().toString(),
             content: value,
             status: TODO_STATUS.WILLD
         }
@@ -35,14 +35,15 @@ function useTodo(): IUseTodo {
         const todoList = getLocalList()
         store.dispatch(SET_TODO_LIST, todoList)
     }
-    function removeTodo() {
-        
+    function removeTodo(id: string) {
+        store.dispatch(REMOVE_TODO, id)
+        setLocalList(store.state.list);
     }
-    function setStatus() {
-        
+    function setStatus(msg: string) {
+        console.log('msg :>> ', msg);
     }
     function setDoing() {
-        
+        console.log('setDoing');
     }
     return {
         setTodo,

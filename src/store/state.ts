@@ -1,4 +1,4 @@
 import { IState } from '@/typings/index'
-export default <IState> {
+export default <IState>{
     list: []
 }
