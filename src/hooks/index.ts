@@ -1,13 +1,14 @@
-import { SET_TODO, SET_TODO_LIST, REMOVE_TODO } from "@/store/actionTypes";
+import { SET_TODO, SET_TODO_LIST, REMOVE_TODO, SET_STATUS, SET_DOING } from "@/store/actionTypes";
 import { ITodo, TODO_STATUS } from "@/typings"
+import { watch } from "vue";
 import { Store, useStore } from "vuex"
 
 export interface IUseTodo {
     setTodo: (value: string) => void;
     setTodoList: () => void;
     removeTodo: (id: string) => void;
-    setStatus: (msg: string) => void;
-    setDoing: () => void;
+    setStatus: (id: string) => void;
+    setDoing: (id: string) => void;
 }
 interface IUseLocalStorage {
     getLocalList: () => ITodo[];
@@ -15,8 +16,15 @@ interface IUseLocalStorage {
 }
 function useTodo(): IUseTodo {
     const store: Store<any> = useStore();
-    const { setLocalList }: IUseLocalStorage = useLocalStorage();
-
+    const { setLocalList, getLocalList }: IUseLocalStorage = useLocalStorage();
+    const todoList = getLocalList()
+    // 监听数据变化更新localStorage
+    watch(()=>{
+        return store.state.list;
+    }, (todoList)=>{
+        console.log('todoList :>> ', todoList);
+        setLocalList(todoList);
+    })
     // 保存todo
     function setTodo(value: string): void {
         const todo: ITodo = {
@@ -26,24 +34,19 @@ function useTodo(): IUseTodo {
         }
         // 插入一条
         store.dispatch(SET_TODO, todo)
-        // 存储localstorage
-        setLocalList(store.state.list);
     }
     // 设置list
     function setTodoList() {
-        const { getLocalList }: IUseLocalStorage = useLocalStorage()
-        const todoList = getLocalList()
         store.dispatch(SET_TODO_LIST, todoList)
     }
     function removeTodo(id: string) {
         store.dispatch(REMOVE_TODO, id)
-        setLocalList(store.state.list);
     }
-    function setStatus(msg: string) {
-        console.log('msg :>> ', msg);
+    function setStatus(id: string) {
+        store.dispatch(SET_STATUS, id)
     }
-    function setDoing() {
-        console.log('setDoing');
+    function setDoing(id: string) {
+        store.dispatch(SET_DOING, id)
     }
     return {
         setTodo,

@@ -1,16 +1,16 @@
 <template>
   <div>
     <input type="checkbox" @click="setStatus(item.id)" />
-    <span :class="item.state === FINISHED ? 'line-through' : ''">
+    <span :class="item.status === FINISHED ? 'line-through' : ''">
       {{ item.content }}
     </span>
     <button @click="removeTodo(item.id)">删除</button>
     <button
       @click="setDoing(item.id)"
-      v-if="item.state !== FINISHED"
-      :class="item.state === DOING ? 'doing' : 'willdo'"
+      v-if="item.status !== FINISHED"
+      :class="item.status === DOING ? 'doing' : 'willdo'"
     >
-      马上做
+      {{ item.status === DOING ? '正在做': '马上做'}}
     </button>
   </div>
 </template>

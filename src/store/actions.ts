@@ -1,6 +1,6 @@
 import { IState, ITodo } from '@/typings'
 import { Commit } from 'vuex'
-import { SET_TODO, SET_TODO_LIST, REMOVE_TODO } from './actionTypes'
+import { SET_TODO, SET_TODO_LIST, REMOVE_TODO, SET_STATUS, SET_DOING } from './actionTypes'
 interface ICtx {
     commit: Commit,
     state: IState
@@ -18,5 +18,13 @@ export default {
     // 删除
     [REMOVE_TODO]({ commit }: ICtx, id: string): void {
         commit(REMOVE_TODO, id)
+    },
+    // 修改是否完成状态
+    [SET_STATUS]({ commit }: ICtx, id: string): void {
+        commit(SET_STATUS, id)
+    },
+    // 修改正在做状态
+    [SET_DOING]({ commit }: ICtx, id: string): void {
+        commit(SET_DOING, id)
     }
 }
